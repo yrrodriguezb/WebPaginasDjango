@@ -1,0 +1,27 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Páginas{% endblock %}
+{% block content %}
+{% include "pages/includes/pages_menu.html" %}
+<main role="main">
+  <div class="container mb-4">
+    {% for page in pages|dictsort:"id" reversed %}
+      <div class="row mt-3">
+        <div class="col-md-9 mx-auto">
+          <h2 class="mb-4">{{page.title}}</h2>
+          <div>
+            <p>{{page.content|striptags|safe|truncatechars:"200"}}</p>
+            <p>
+              <a class="btn btn-primary btn-sm" href="{% url 'pages:page' page.id page.title|slugify %}" role="button">Leer más</a>
+              {% if request.user.is_staff %}
+              <a class="btn btn-success btn-sm" href="{% url 'pages:update' page.id %}" role="button">Editar</a>
+              <a class="btn btn-danger btn-sm" href="{% url 'pages:delete' page.id %}" role="button">Eliminar</a>
+              {% endif %}
+            </p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</main>
+{% endblock %}
